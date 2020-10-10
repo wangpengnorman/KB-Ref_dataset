@@ -11,4 +11,4 @@ The dataset can be downloaded from [BaiduYun Drive (code: hijs)](https://pan.bai
 * Vocabualry.json: The vocabulary file.
 * Wikipedia.json, ConceptNet.json, WebChild.json: The knowledge we collect. The key is the object category and the value is the corresponding facts.
 
-If you have any question about this dataset, please email to 1226726279@qq.com directly. And I will response you as as soon as possible.
+If you have any question about this dataset, please email to dongyang.liu0705@qq.com directly. And I will response you as as soon as possible.
