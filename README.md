@@ -11,6 +11,6 @@ The dataset can be downloaded from [BaiduYun Drive (code: 3vze)](https://pan.bai
 * Vocabualry.json: The vocabulary file.
 * Wikipedia.json, ConceptNet.json, WebChild.json: The knowledge we collect. The key is the object category and the value is the corresponding facts.
 
-If you have any question about this dataset and code, please email to **dongyang.liu0705@qq.com** directly. And I will response you as as soon as possible.
+**If you have any question about this dataset and code, please email to dongyang.liu0705@qq.com directly. And I will response you as as soon as possible.**
 
 **The code of baseline model will coming soon. I'm busy preparing for graduation recently, please wait. Thank you!**
