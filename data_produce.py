@@ -8,7 +8,7 @@ import time
 
 if __name__ == '__main__':
     d = enchant.Dict("en_US")
-    with open('./word2vec_model/Vocabulary.json') as file:
+    with open('./data/KB-REF/Vocabulary.json') as file:
         word_dict = json.load(file)
     def get_wordnet_pos(treebank_tag):
         if treebank_tag.startswith('J'):
@@ -52,21 +52,21 @@ if __name__ == '__main__':
         return a[0:50], c
 
 
-    with open('./word2vec_model/expression.json') as file:
+    with open('./data/KB-REF/expression.json') as file:
         data = json.load(file)
-    with open('./word2vec_model/candidate.json') as file:
+    with open('./data/KB-REF/candidate.json') as file:
         cand = json.load(file)
     with open('./json/top_facts.json') as file:
         facts = json.load(file)
-    with open('./word2vec_model/objects.json') as file:
+    with open('./data/KB-REF/objects.json') as file:
         objects = json.load(file)
-    with open('./word2vec_model/image.json') as file:
+    with open('./data/KB-REF/image.json') as file:
         w_h = json.load(file)
-    with open('./word2vec_model/train.json') as file:
+    with open('./data/KB-REF/train.json') as file:
         train_set = json.load(file)
-    with open('./word2vec_model/val.json') as file:
+    with open('./data/KB-REF/val.json') as file:
         val_set = json.load(file)
-    with open('./word2vec_model/test.json') as file:
+    with open('./data/KB-REF/test.json') as file:
         test_set = json.load(file)
     train = []
     val = []
