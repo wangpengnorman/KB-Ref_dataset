@@ -138,63 +138,7 @@ def test(epoch, model, critertion, f_loss, use_gpu, Dataset):
             correct += pred.eq(label.data).cpu().sum()
             #result.append({'image': path,'gt': label.data.cpu().numpy().tolist(),'pred': output.data.cpu().numpy().tolist(),'f_weight': f_weight.detach().cpu().numpy().tolist()})
             result.append({'image': path,'gt': label.data.cpu().numpy().tolist(),'pred': output.data.cpu().numpy().tolist()})
-            '''
-            for i in range(len(jpg)):
-                o = i_weight[i].unsqueeze(0).unsqueeze(0).data.cpu()
-                #print(o.size())
-                w, h = Image.open(path[i]).size
-                o = F.interpolate(o, (h, w), mode='bilinear').squeeze(0).squeeze(0).numpy()
-                #print(o.shape)
-                o = np.fabs(o)
-                #print(o.shape)
-                plt.imsave('heatmap/0/' + path[i].split('/')[-1].split('.')[0]+'_'+str(label[i].data.cpu())+'.jpg', o)
-                origin = Image.open(path[i])
-                o = Image.open('heatmap/0/' + path[i].split('/')[-1].split('.')[0]+'_'+str(label[i].data.cpu())+'.jpg')
-                print(origin.size, o.size)
-                try:
-                    o = Image.blend(origin, o, 0.4)
-                    o.save('heatmap/1/' + path[i].split('/')[-1].split('.')[0]+'_'+str(label[i].data.cpu())+'.jpg')
-                except:
-                    continue
-            #'''
-            '''
-            i_weight = F.interpolate(i_weight.unsqueeze(1).data.cpu(), (500, 333), mode='bilinear')
-            i_weight = i_weight.squeeze(0).numpy()
-            for i in range(0, output.shape[0]):
             
-                jpg = i_weight[i]#.numpy()
-            
-                jpg = np.fabs(jpg)
-            
-                plt.imsave('./0.jpg', jpg)
-            img = Image.open('./image/2320221.jpg')	
-            jpg = Image.open('./0.jpg')
-            print(img.size, jpg.size)
-            img = Image.blend(img, jpg, 0.4)
-            img.save('./00.jpg')
-            '''
-            '''
-            for i in range(0, len(jpg)):
-                x = i_weight.select(0, i)
-                res = transforms.Resize((224, 224))
-                img = Image.open(path[i])
-                img = res(img)
-                green_region = Image.new("RGB", (32, 32), 'red')
-                blue_region = Image.new("RGB", (32, 32), 'blue')
-            
-                for j in range(0, 7):
-                    for k in range(0, 7):
-                        box = (int(j*32), int(k*32), int((j+1)*32), int((k+1)*32))
-                        img_region = img.crop(box)
-                        wgt = x.data[j][k]*49
-                        coff = 0.4
-                        if wgt > 1.1:
-                            img_region = Image.blend(img_region, green_region, wgt*coff)
-                        else:
-                            img_region = Image.blend(img_region, blue_region, wgt * coff)
-                        img.paste(img_region, box)
-                img.save('./heatmap/' + str(epoch) + '_' + path[i].split('/')[-1])
-            '''
         with open('result_mn.json', 'w') as file:
             json.dump(result, file)
         #'''
@@ -208,7 +152,7 @@ def test(epoch, model, critertion, f_loss, use_gpu, Dataset):
 
 
 if __name__ == '__main__':
-    writer = SummaryWriter('{}/{}'.format('runs', 'nmn'))
+    writer = SummaryWriter('{}/{}'.format('runs', 'mn'))
     train_transform = transforms.Compose([
         transforms.Resize((224, 224)),
         transforms.RandomHorizontalFlip(),
@@ -221,18 +165,15 @@ if __name__ == '__main__':
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ])
     net = Basenet(args)
-    trainDataset = data('./image','./json/train.json', data_transform=train_transform)
-    valDataset = data('./image', './json/val.json', data_transform=test_transform)
-    testDataset = data('./image','./json/test.json', data_transform=test_transform)
-    trainDataloader = DataLoader(trainDataset, batch_size=8, shuffle=True, num_workers=4, drop_last=True)
-    valDataloader = DataLoader(valDataset, batch_size=8, shuffle=True, num_workers=4, drop_last=True)
-    testDataloader = DataLoader(testDataset, batch_size=8, shuffle=True, num_workers=4, drop_last=True)
+    trainDataset = data('../image','../json/train.json', data_transform=train_transform)
+    valDataset = data('../image', '../json/val.json', data_transform=test_transform)
+    testDataset = data('../image','../json/test.json', data_transform=test_transform)
+    trainDataloader = DataLoader(trainDataset, batch_size=16, shuffle=True, num_workers=4, drop_last=True)
+    valDataloader = DataLoader(valDataset, batch_size=16, shuffle=True, num_workers=4, drop_last=True)
+    testDataloader = DataLoader(testDataset, batch_size=16, shuffle=True, num_workers=4, drop_last=True)
     critertion = torch.nn.CrossEntropyLoss()
     f_loss = torch.nn.BCELoss()
     use_gpu = torch.cuda.is_available()
-    #test_loss = test(40, net, critertion, f_loss, use_gpu, testDataloader)
-    #print(net)
-    #'''
     no_params = list(map(id, net.f_global.parameters()))
     base_params = filter(lambda x: id(x) not in no_params, net.parameters())
     optimizer = torch.optim.SGD([
@@ -240,9 +181,7 @@ if __name__ == '__main__':
         {'params': net.f_global.parameters(), 'lr': 0}
     ], lr=1e-4, momentum=0.9, weight_decay=5e-4)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', factor=0.5, patience=1)
-    #scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=20, gamma=0.5)
     use_gpu = torch.cuda.is_available()
-    #print(net)
     
     if use_gpu:
         net.cuda()
