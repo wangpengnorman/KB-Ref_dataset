@@ -179,7 +179,7 @@ if __name__ == '__main__':
     optimizer = torch.optim.SGD([
         {'params': base_params},
         {'params': net.f_global.parameters(), 'lr': 0}
-    ], lr=1e-4, momentum=0.9, weight_decay=5e-4)
+    ], lr=1e-4, momentum=0.9, weight_decay=1e-5)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', factor=0.5, patience=1)
     use_gpu = torch.cuda.is_available()
     
