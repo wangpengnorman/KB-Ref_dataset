@@ -10,7 +10,29 @@ The dataset can be downloaded from [BaiduYun Drive (code: 3vze)](https://pan.bai
 * train.json, val.json, test.json: We split dataset according to the image. These files descripe which pictures are for train, val, and test.
 * Vocabualry.json: The vocabulary file.
 * Wikipedia.json, ConceptNet.json, WebChild.json: The knowledge we collect. The key is the object category and the value is the corresponding facts.
-
+## Baseline
+1. Install the environment:
+	```
+	pip install -r requirements.txt
+	```
+2. Prepare the dataset
+* Download the dataset and unpress it, then put it into **data/**.
+* Download the image and put it into **images/**.
+* Train the word2vetor model:
+	```
+	python word2vetor.py
+	```
+* Find the top-k facts using pretrained word2vetor model:
+	```
+	python top_fact.py
+	```
+* Produce the data for train and test:
+	```
+	python data_produce.py
+	```
+3. Train and eval the baseline model:
+	```
+	CUDA_VISIBLE_DEVICES=GPU_IDS python tools/train.py
+	```
 **If you have any question about this dataset and code, please email to dongyang.liu0705@qq.com directly. And I will response you as as soon as possible.**
 
-**The code of baseline model will coming soon. I'm busy preparing for graduation recently, please wait. Thank you!**
